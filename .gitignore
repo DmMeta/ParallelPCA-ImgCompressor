@@ -1,0 +1,10 @@
+mtx.*
+*threads*
+*demo*
+.vscode/*
+venv/*
+*.o
+notes*
+cyclone*
+earth*
+__pycache__*
