@@ -24,9 +24,11 @@ def compute_covMtx(img_path, shape, dtype):
     if (imgMatNorm.ndim > 2):
         covMtx_comb = []
         for ch in range(imgMatNorm.shape[2]):
-            channelCovMtx = np.cov(imgMatNorm[:, :, ch].T)
+            channelCovMtx = np.cov(imgMatNorm[:, :, ch].T) # channelCovMtx.shape = (imgMat.shape[1], imgMat.shape[1])
             covMtx_comb.append(channelCovMtx)
-        covMtx = np.vstack(covMtx_comb)
+        # covMtx_comb has channels elements, each element is a covariance matrix of shape (imgMat.shape[1], imgMat.shape[1]) corresponding to a channel
+        
+        covMtx = np.vstack(covMtx_comb) # covMtx.shape = (channels * imgMat.shape[1], imgMat.shape[1])
     else:
         covMtx = np.cov(imgMatNorm.T)
             
@@ -46,8 +48,7 @@ def load_covMtx(request, images_dir, results_dir):
     img_path = os.path.join(images_dir, img_file)
     
     npCovMtx = compute_covMtx(img_path, shape, dtype)
-    covMtx_file = results_dir
-    calcCovMtx = load_covMtx_from_results(covMtx_file, dtype = np.float64)
+    calcCovMtx = load_covMtx_from_results(results_dir, dtype = np.float64)
     return npCovMtx, calcCovMtx
 
 @pytest.mark.parametrize("load_covMtx", [("elvis.bin.gz", (469, 700), np.float64)], indirect=True)
