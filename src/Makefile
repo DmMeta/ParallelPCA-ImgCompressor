@@ -12,17 +12,13 @@ ifeq "$(debug)" "1"
 endif
 	
 all: main
+.PHONY: clean
 
 main: pca.o main.o
 	$(CXX) $(CPPFLAGS_SIMD) -o $@ $^  $(OPENBLAS_LPATH) $(LIBS) $(LDFLAGS)
 
-
-pca_threads: pca_threads.o
-	@$(CXX) $(CPPFLAGS_SIMD) -o $@ $< $(OPENBLAS_LPATH) $(LIBS) $(LDFLAGS)
-
 %.o: %.cpp
 	$(CXX) $(CPPFLAGS_SIMD) $(HEADERS) -c -o $@ $^
 
-
 clean:
-	@rm -rf *.txt *.o pca_threads main 
+	@rm -rf *.txt *.o main 
