@@ -685,6 +685,7 @@ ImgMatrix<double> PCA<T>::calcCovMatrix(const ImgMatrix<double>& data) {
         for(auto i = 0; i < columns; i++){
             for(auto j = i; j < columns; j++)
             {
+            #ifdef __SIMD__
                 __m256d cumprod = _mm256_set1_pd(0.0);
                 // __m256d c = _mm256_set1_pd(0.0);
                 for(auto k = 0; k < rows; k = k + 4){
@@ -716,11 +717,19 @@ ImgMatrix<double> PCA<T>::calcCovMatrix(const ImgMatrix<double>& data) {
 
                 covMatrix(i, j, l) = sum / (rows - 1);
                 covMatrix(j, i, l) = covMatrix(i, j, l);
-                
-
+            #else
+                sum = 0.0;
+                for(auto k = 0; k < rows; k++){
+                    sum += data(k, i, l) * data(k, j, l);
+                }
+                covMatrix(i, j, l) = sum / (rows - 1);
+                covMatrix(j, i, l) = covMatrix(i, j, l);
+            #endif
             }
         }
     }
+
+    
     return covMatrix;
 
 }

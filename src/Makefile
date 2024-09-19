@@ -10,7 +10,11 @@ debug?=0
 ifeq "$(debug)" "1"
 	CPPFLAGS_SIMD += -D_DEBUG_
 endif
-	
+
+ifeq "$(simd)" "1"
+	CPPFLAGS_SIMD += -D__SIMD__
+endif	
+
 all: main
 .PHONY: clean
 

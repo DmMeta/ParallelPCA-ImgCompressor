@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
 
 make clean
-make debug=${DEBUG}
+make debug=${DEBUG} simd=${SIMD}
 exec ./main
