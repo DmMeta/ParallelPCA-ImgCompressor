@@ -39,19 +39,19 @@ def images_dir():
     return "../data/"
 
 @pytest.fixture(scope='session')
-def results_dir():
+def covMtx_file():
     return "../results/covarianceMatrix"
 
 @pytest.fixture(scope='function')
-def load_covMtx(request, images_dir, results_dir):
+def load_covMtx(request, images_dir, covMtx_file):
     img_file, shape, dtype = request.param
     img_path = os.path.join(images_dir, img_file)
     
     npCovMtx = compute_covMtx(img_path, shape, dtype)
-    calcCovMtx = load_covMtx_from_results(results_dir, dtype = np.float64)
+    calcCovMtx = load_covMtx_from_results(covMtx_file, dtype = np.float64)
     return npCovMtx, calcCovMtx
 
-@pytest.mark.parametrize("load_covMtx", [("elvis.bin.gz", (469, 700), np.float64)], indirect=True)
+@pytest.mark.parametrize("load_covMtx", [("lena_hd.bin.gz", (822, 1200, 3), np.uint8)], indirect=True)
 def test_covMtx(load_covMtx):
     npCovMtx, calcCovMtx = load_covMtx
     

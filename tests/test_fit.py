@@ -24,20 +24,20 @@ def images_dir():
     return "../data/"
 
 @pytest.fixture(scope='session')
-def results_dir():
+def stats_files():
     return "../results/mean", "../results/std"
 
 @pytest.fixture(scope='function')
-def load_stats(request, images_dir, results_dir):
+def load_stats(request, images_dir, stats_files):
     img_file, shape, dtype = request.param
     img_path = os.path.join(images_dir, img_file)
     
     npMean, npStd = compute_stats(img_path, shape, dtype)
-    mean_file, std_file = results_dir
+    mean_file, std_file = stats_files
     calcMean, calcStd = load_stats_from_results(mean_file, std_file, dtype = np.float64)
     return (npMean, npStd), (calcMean, calcStd)
 
-@pytest.mark.parametrize("load_stats", [("lena_hd.bin.gz", (822, 1200, 3), np.uint8)], indirect=True)
+@pytest.mark.parametrize("load_stats", [("lena_hd.bin.gz", (822,1200,3), np.uint8)], indirect=True)
 def test_stats(load_stats):
     (npMean, npStd), (calcMean, calcStd) = load_stats
     

@@ -56,20 +56,20 @@ def images_dir():
     return "../data/"
 
 @pytest.fixture(scope='session')
-def results_dir():
+def eigenvectors_file():
     return "../results/eigenVectors"
 
 @pytest.fixture(scope='function')
-def load_eigv(request, images_dir, results_dir):
+def load_eigv(request, images_dir, eigenvectors_file):
     img_file, shape, dtype, princ_comp = request.param
     img_path = os.path.join(images_dir, img_file)
     
     npEigv = compute_eigv(img_path, shape, dtype, princ_comp)
-    calcEigv = load_eigv_from_results(results_dir, dtype = np.float64)
+    calcEigv = load_eigv_from_results(eigenvectors_file, dtype = np.float64)
     
     return npEigv, calcEigv
 
-@pytest.mark.parametrize("load_eigv", [("elvis.bin.gz", (469, 700), np.float64, 100)], indirect=True)
+@pytest.mark.parametrize("load_eigv", [("lena_hd.bin.gz", (822, 1200, 3), np.uint8, 100)], indirect=True)
 def test_eigv(load_eigv):
     npEigv, calcEigv = load_eigv
     
