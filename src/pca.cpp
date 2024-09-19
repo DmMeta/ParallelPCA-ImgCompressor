@@ -1,7 +1,5 @@
 #include "pca.hpp"
 
-// using fs = std::filesystem;
-
 
 void print_times(std::array<int64_t, 5> times)
 {
@@ -12,4 +10,3 @@ void print_times(std::array<int64_t, 5> times)
     std::cout << "Eigen Decomposition: " << times[3] << "s\n";
     std::cout << "Projection: " << times[4] << "ms\n";
 }
-

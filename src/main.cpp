@@ -1,5 +1,4 @@
 #include <iostream>
-// #include <cstdint>
 #include "pca.hpp"
 
 ///////Dataset Info///////
@@ -17,21 +16,16 @@ constexpr const std::string_view results_path = "/opt/ImgCompression/results/";
 int main() {
     
    
-    ImgMatrix<double> img{"/data/elvis.bin.gz", 469,700, static_cast<uint8_t>(1), Order::ROW_MAJOR}; 
-    img.saveImg(std::string{results_path} + std::string{"elvis.png"}, ImageFormat::PNG);
+    ImgMatrix<uint8_t> img{"/data/lena_hd.bin.gz", 822, 1200, static_cast<uint8_t>(3), Order::ROW_MAJOR}; 
+    img.saveImg(std::string{results_path} + std::string{"lena_hd.png"}, ImageFormat::PNG);
     
-    // for(size_t i = 0; i < 5; i++){rows, cols)))
-    //     std::cout << (img(i,i,0)) << std::endl;
-    // }
 
-    // img.saveImg("output_image.bin", ImageFormat::BIN);
-
-    PCA<double> pca;
+    PCA<uint8_t> pca;
     auto compressedImg = pca.performPCA(img, 100);
     // std::cout << "Cache line size:" << sysconf (_SC_LEVEL1_DCACHE_LINESIZE) << std::endl;
     // compressedImg.saveImg("compressed_image.bin", ImageFormat::BIN);
     auto decompressedImg = pca.inversePCA(compressedImg);
-    // decompressedImg.saveImg(std::string{results_path} + std::string{"elvis_decompressed"}, ImageFormat::PNG);
+    decompressedImg.saveImg(std::string{results_path} + std::string{"lena_hd_decompressed"}, ImageFormat::PNG);
     
 #ifdef _DEBUG_
 ImgMatrix<uint8_t> img2{"/data/lena_hd.bin.gz", 822, 1200, static_cast<uint8_t>(3), Order::ROW_MAJOR}; 
@@ -47,8 +41,3 @@ img4.saveImg(std::string{results_path} + std::string{"lena_hd_t"}, ImageFormat::
 
     return 0;
 }
-
-
-
-// cv::Mat image(height, width, CV_8UC1, img.data().data());
-// cv::imwrite("output_image.png", image);

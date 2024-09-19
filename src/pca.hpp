@@ -118,7 +118,7 @@ reportResults(std::string_view filename, const T& data, std::tuple<uint16_t, uin
         std::ofstream file(path);
         
         if (!file.is_open())
-            throw std::runtime_error("Error opening file for writing");
+            throw std::runtime_error("Error opening file for writing.");
             
         auto [rows, cols, channels] = shape;
         for (auto k = 0; k < channels; k++){                    
@@ -151,7 +151,7 @@ reportResults(std::string_view filename, const T& data, std::tuple<uint16_t, uin
         std::ofstream file(path);
         
         if (!file.is_open())
-            throw std::runtime_error("Error opening file for writing");
+            throw std::runtime_error("Error opening file for writing.");
             
         auto [rows, cols, channels] = shape;
 
@@ -577,7 +577,6 @@ ImgMatrix<double> PCA<T>::performPCA(const ImgMatrix<T>& data, uint16_t n_compon
     reportResults("projection", compressedImg.data(), compressedImg.shape());
 #endif
 
-
     return compressedImg;
 }
 
@@ -604,11 +603,12 @@ ImgMatrix<double> PCA<T>::inversePCA(const ImgMatrix<double>& data) {
             }
         }
     }
+    
 
     // std::cout << "Denormalization time: " << std::chrono::duration_cast<std::chrono::milliseconds>(hclock::now() - start).count() << " ms\n";
-    // std::transform(decompressedImg.data().begin(), decompressedImg.data().end(), decompressedImg.data().begin(), [](double val) {
-    //     return std::clamp(val, 0.0, 255.0);
-    // });
+    std::transform(decompressedImg.data().begin(), decompressedImg.data().end(), decompressedImg.data().begin(), [](double val) {
+        return std::clamp(val, 0.0, 255.0);
+    });
     return decompressedImg;
     
 }
